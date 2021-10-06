@@ -188,7 +188,7 @@ def playingScreen():
 			for vehicle in running_vehicles:
 				vehicle.draw()
 			screen.blit(pg.image.load('IMG/opacity.png'),[0,0])
-			screen.blit(small_font.render('Press ENTER to UNPAUSE',True,green),(250,280))
+			screen.blit(small_font.render('Press ENTER to CONTINUE',True,green),(250,280))
 
 			# bắt sự kiện
 			for event in pg.event.get():
