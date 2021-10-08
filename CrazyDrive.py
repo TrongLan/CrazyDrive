@@ -103,7 +103,7 @@ def playingScreen():
 			tic = clock.tick(60)/1000 # đổi về đơn vị giây (fps = 60)
 
 			# hiển thị màn hình chơi (background, thanh thời gian, lời nhắn, xe)
-			time_bar = small_font.render('Time: '+str(round(time,2))+'s',True, white)
+			time_bar = small_font.render('Time: '+'{:.2f}'.format(time)+'s',True, white)
 			screen.blit(background,(background_scroll_x,0))
 			screen.blit(time_bar,(380,10))
 			screen.blit(tiny_font.render('Press ENTER to PAUSE',True,white),(25,540))
@@ -146,7 +146,7 @@ def playingScreen():
 							brake.stop()
 							mixer.music.stop()
 							crash.play()
-							return background_scroll_x, mycar.getPos(), round(time,2), running_vehicles
+							return background_scroll_x, mycar.getPos(), time, running_vehicles
 
 				# nếu xe đầu trong danh sách các xe trên đường đi hết màn hình, lập tức xóa xe đó và thêm xe mới vào danh sách
 				if running_vehicles[0].getPos()[0] <= -200:
@@ -181,7 +181,7 @@ def playingScreen():
 							brake.stop()
 		else:
 			# màn hình khi đang pause game
-			time_bar = small_font.render('Time: '+str(round(time,2))+'s',True, white)
+			time_bar = small_font.render('Time: '+'{:.2f}'.format(time)+'s',True, white)
 			screen.blit(background,(background_scroll_x,0))
 			screen.blit(time_bar,(380,10))
 			mycar.draw()
@@ -204,7 +204,7 @@ def playingScreen():
 def gameOverScreen(accident):
 	'''Hiển thị màn hình game over, nhận đầu vào là thông tin vụ tai nạn được trả về từ hàm playingScreen'''
 	big_message = big_font.render(random.choice(['YOU DIED!','NICE DRIVE!','XIN VINH BIET!']),True, red)
-	small_message = small_font.render('Time survive: '+str(accident[2])+"s", True, green)
+	small_message = small_font.render('Time survive: '+'{:.2f}'.format(accident[2])+"s", True, green)
 	x, y = 1000, 1000 # hai biến tạo hiệu ứng di chuyển vào
 	vinhbiet.play()
 	while True:
@@ -219,7 +219,7 @@ def gameOverScreen(accident):
 		screen.blit(pg.image.load('IMG/opacity.png'),[0,0])
 		screen.blit(pg.image.load('IMG/rip.png'),[x,220])
 		screen.blit(big_message,(screen_width/2-big_message.get_width()/2,120))
-		screen.blit(small_message,(120, 275))
+		screen.blit(small_message,(120, 250))
 
 		# tạo 2 nút là replay và back
 		replay_button = Button(120,y,120,70, (12, 158, 90),(11, 104, 99),'REPLAY','ocrastdopentype',18,white,white,0,10)
