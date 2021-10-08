@@ -51,7 +51,7 @@ class Vehicle():
 		self.kind = kind
 	def draw(self):
 		screen.blit(self.kind,[self.x, self.y])
-	def move(self, speed):
+	def moveBackward(self, speed):
 		self.x -= speed
 	def getPos(self):
 		return self.x, self.y
@@ -63,8 +63,6 @@ class SpecialVehicle(Vehicle):
 		self.isSlowDown = False
 	def speedUp(self, move):
 			self.x+=move
-	def slowDown(self, move):
-			self.x-=move
 	def turnLeft(self, move):
 		self.y-=move
 	def turnRight(self, move):
@@ -138,7 +136,7 @@ def playingScreen():
 				# hiển thị các xe trên đường
 				for vehicle in running_vehicles:
 					vehicle.draw()
-					vehicle.move(speed)
+					vehicle.moveBackward(speed)
 
 					# kiểm tra nếu có va chạm,  trả về thông tin vụ tai nạn (một danh sách gồm vị trí các xe, thời gian chạy)
 					if mycar.getPos()[1] == vehicle.getPos()[1]:
@@ -154,9 +152,9 @@ def playingScreen():
 					running_vehicles.append(Vehicle(running_vehicles[-1].getPos()[0]+420, random.choice([75,225,375]), random.choice(vehicle_type)))	
 				
 				if mycar.x<600: # xe của người chơi luôn tiến lên phía trước nếu vị trí nhỏ hơn 600px
-					mycar.speedUp(1) 
+					mycar.speedUp(2) 
 				if mycar.isSlowDown and mycar.x>0: # kiểm tra nếu xe muốn phanh và vị trí xe lớn hơn 0 thì chậm lại
-					mycar.slowDown(4)
+					mycar.moveBackward(5)
 
 				# bắt sự kiện
 				for event in pg.event.get():
