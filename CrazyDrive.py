@@ -12,7 +12,7 @@ black = (0,0,0)
 screen_width = 1000
 screen_height = 600
 background = pg.image.load('IMG/background.png')
-bluecar = pg.image.load('IMG/bluecar.png')
+orangecar = pg.image.load('IMG/orangecar.png')
 bluetruck = pg.image.load('IMG/bluetruck.png')
 bus = pg.image.load('IMG/bus.png')
 blacktruck = pg.image.load('IMG/blacktruck.png')
@@ -89,7 +89,7 @@ def playingScreen():
 	speed, level = 4, 1 # speed để điều chỉnh tốc độ của xe, level để điều chỉnh độ khó
 	background_scroll_x = 0 # để tạo hiệu ứng xe đang chạy
 
-	mycar = SpecialVehicle(-150,random.choice([75,225,375]),bluecar) # tạo đối tượng SpecialVehicle (là cái xe người chơi điều khiển)
+	mycar = SpecialVehicle(-150,random.choice([75,225,375]),orangecar) # tạo đối tượng SpecialVehicle (là cái xe người chơi điều khiển)
 	# đoạn này vẽ tạo các đối tượng Vehicle (các xe đi trên đường) và đưa chúng vào list, vị trí các xe cách nhau 420px
 	for i in range(3):
 		temp = Vehicle(1000+i*420,random.choice([75,225,375]),random.choice(vehicle_type))
@@ -105,9 +105,9 @@ def playingScreen():
 			screen.blit(background,(background_scroll_x,0))
 			screen.blit(time_bar,(380,10))
 			screen.blit(tiny_font.render('Press ENTER to PAUSE',True,white),(25,540))
-			screen.blit(tiny_font.render('Press SPACE to turn on the horn',True,white),(25, 565))
+			screen.blit(tiny_font.render('Press SPACE to HONK',True,white),(25, 565))
 
-			# vẽ xe của người chơi
+			# vẽ xe của người chơi và mũi tên chỉ hướng
 			mycar.draw()
 			if mycar.y == 75:
 				mycar.drawDownArrow()
@@ -212,7 +212,7 @@ def gameOverScreen(accident):
 		screen.blit(background,[accident[0],0])
 		for vehicle in accident[3]:
 			vehicle.draw()
-		screen.blit(bluecar,[accident[1][0],accident[1][1]])
+		screen.blit(orangecar,[accident[1][0],accident[1][1]])
 		screen.blit(pg.image.load('IMG/flame.png'),[accident[1][0],accident[1][1]])
 		screen.blit(pg.image.load('IMG/opacity.png'),[0,0])
 		screen.blit(pg.image.load('IMG/rip.png'),[x,220])
