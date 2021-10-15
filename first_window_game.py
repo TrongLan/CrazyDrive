@@ -7,15 +7,15 @@ pygame.init()
 screen = pygame.display.set_mode((1000, 600))
 pygame.display.set_caption("CRAYZY DRIVE")
 #nhac
-mixer.music.load("C:/Users/KTC/Desktop/LEARNING/lap_trinh_python/bai_tap_code_python/duan/image/backmusic.mp3")
+mixer.music.load("IMG/backmusic.mp3")
 mixer.music.play(-1)
 # nền
-background = pygame.image.load("C:/Users/KTC/Desktop/LEARNING/lap_trinh_python/bai_tap_code_python/duan/image/startbackground.png")
+background = pygame.image.load("IMG/startbackground.png")
 # tải ảnh các nút
-play = pygame.image.load("C:/Users/KTC/Desktop/LEARNING/lap_trinh_python/bai_tap_code_python/duan/image/anh/playbig.png")
-exit = pygame.image.load("C:/Users/KTC/Desktop/LEARNING/lap_trinh_python/bai_tap_code_python/duan/image/anh/exit1.png")
-intruction = pygame.image.load("C:/Users/KTC/Desktop/LEARNING/lap_trinh_python/bai_tap_code_python/duan/image/anh/book.png")
-guideplayer = pygame.image.load("C:/Users/KTC/Desktop/LEARNING/lap_trinh_python/bai_tap_code_python/duan/image/guidebackground.png")
+play = pygame.image.load("IMG/playbig.png")
+exit = pygame.image.load("IMG/exit1.png")
+intruction = pygame.image.load("IMG/book.png")
+guideplayer = pygame.image.load("IMG/guidebackground.png")
 guide = False
 move = 2000
 # tạo nút bấm
