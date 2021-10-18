@@ -66,7 +66,7 @@ def playingScreen():
 		running_vehicles.append(temp)
 
 	# Game tips để hiện thị khi dừng game
-	game_tips = ['The horn button is just for fun :)','Press ENTER to UNPAUSE','If you quit now, your score may not been saved','Remember your vehicle always automatically speeds up','Press and hold S to control your speed']
+	game_tips = ['The horn button is just for fun :)','Press ENTER to UNPAUSE','If you quit now, your score may not been saved','Remember your vehicle always automatically speeds up','Press and hold A to control your speed']
 	tip = ''
 
 	# vòng lặp game
