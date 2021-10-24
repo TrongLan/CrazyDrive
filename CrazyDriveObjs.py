@@ -43,7 +43,7 @@ class TextButton(RectangleButton):
         screen.blit(text,text_coordinate)
 
 class Vehicle():
-    '''định nghĩa phương tiện giao thông trong game gồm vị trí, thể loại'''
+    '''định nghĩa phương tiện giao thông trong game gồm vị trí, thể loại (ảnh)'''
     def __init__(self, x, y, kind):
         self.x = x
         self.y = y
@@ -54,6 +54,8 @@ class Vehicle():
         self.x -= speed
     def getPos(self):
         return self.x, self.y
+    def getSize(self):
+        return self.kind.get_size()
 
 class SpecialVehicle(Vehicle):
     '''định nghĩa phương tiện giao thông người chơi có thể điều khiển (kế thừa lớp Vehicle)'''
