@@ -1,20 +1,25 @@
 import pygame as pg
-from pygame import mixer
 import random
-from CrazyDriveObjs import TextButton, Vehicle, SpecialVehicle
+from CrazyDriveObjs import TextButton, Vehicle, SpecialVehicle, ImageButton
 
 trendy_green = (25, 150, 25)
 arabian_green = (10, 100, 43)
-green = (0,255,0)
+green = (0,220,0)
 valentine_red = (212, 31, 58)
 abarian_red = (163, 11, 46)
 red = (255, 0, 0)
 white = (255,255,255)
 black = (0,0,0)
+traffic_yellow = (239, 183, 0)
+yellow = (255, 220, 0)
+traffic_green = (0,150,0)
+traffic_red = (184, 29, 19)
 
 screen_width = 1000
 screen_height = 600
 background = pg.image.load('IMG/background.png')
+menubackground = pg.image.load('IMG/startbackground.png')
+guidebackground = pg.image.load('IMG/guidebackground.png')
 orangecar = pg.image.load('IMG/orangecar.png')
 bluetruck = pg.image.load('IMG/bluetruck.png')
 bus = pg.image.load('IMG/bus.png')
@@ -27,12 +32,16 @@ policecar = pg.image.load('IMG/policecar.png')
 redcar = pg.image.load('IMG/redcar.png')
 blackcar = pg.image.load('IMG/blackcar.png')
 redmotorbike = pg.image.load('IMG/redmotorbike.png')
-vehicle_type = [bus, bluetruck, blacktruck, taxi, orangetruck, redtruck, redcar, blackcar, policecar, motorbike, redmotorbike]
+
+vehicle_type = [bus, bluetruck, blacktruck, taxi, orangetruck,
+				redtruck, redcar, blackcar, policecar,
+				motorbike, redmotorbike]
 
 pg.init()
-
+pg.display.set_icon(pg.image.load('IMG\\icon.png'))
 screen = pg.display.set_mode((screen_width,screen_height)) # tạo màn hình
 pg.display.set_caption("Crazy Drive - Journey to the graveyard!") # tạo tiêu đề
+
 
 clock = pg.time.Clock() # đồng hồ trong pygame
 # các loại font
@@ -41,28 +50,84 @@ small_font = pg.font.SysFont('ocrastdopentype', 32)
 big_font = pg.font.SysFont('ocrastdopentype', 64)
 
 # âm thanh
-brake = mixer.Sound('SOU/brake.wav')
-crash = mixer.Sound('SOU/crash.wav')
-horn = mixer.Sound('SOU/horn.wav')
-vinhbiet = mixer.Sound('SOU/xin_vinh_biet.wav')
+brake = pg.mixer.Sound('SOU/brake.wav')
+crash = pg.mixer.Sound('SOU/crash.wav')
+horn = pg.mixer.Sound('SOU/horn.wav')
+vinhbiet = pg.mixer.Sound('SOU/xin_vinh_biet.wav')
+
+def menuScreen():
+	pg.mixer.music.load("SOU/backmusic.mp3")
+	pg.mixer.music.play(-1)
+	playButton = TextButton((435,490),(130,70),'PLAY',
+				pg.font.SysFont('ocrastdopentype',18),
+				white,white,traffic_green,green,0,10)
+	guideButton = TextButton((435,400),(130,70),'GUIDE',
+				pg.font.SysFont('ocrastdopentype',18),
+				white,white,traffic_yellow,yellow,0,10)
+	quitButton = TextButton((435,310),(130,70),'QUIT',
+				pg.font.SysFont('ocrastdopentype',18),
+				white,white,traffic_red,red,0,10)
+	while True:
+		mouse_pos = pg.mouse.get_pos()
+		screen.blit(menubackground,(0,0))
+		playButton.draw(screen,mouse_pos)
+		guideButton.draw(screen,mouse_pos)
+		quitButton.draw(screen,mouse_pos)
+		for event in pg.event.get():
+			if event.type == pg.QUIT:
+				raise SystemExit()
+			elif event.type == pg.MOUSEBUTTONDOWN:
+				if event.button == 1:
+					if pg.Rect(playButton.coordinate,playButton.size).collidepoint(mouse_pos):
+						pg.mixer.Sound('SOU/select.wav').play()
+						return 1
+					elif pg.Rect(guideButton.coordinate,guideButton.size).collidepoint(mouse_pos):
+						pg.mixer.Sound('SOU/select.wav').play()
+						return 2
+					elif pg.Rect(quitButton.coordinate,quitButton.size).collidepoint(mouse_pos):
+						raise SystemExit()
+		pg.display.update()
+
+def guideScreen():
+	pg.mixer.music.load("SOU/backmusic.mp3")
+	pg.mixer.music.play(-1)
+
+	while True:
+		mouse_pos = pg.mouse.get_pos()
+		screen.blit(guidebackground,(0,0))
+		back_button = ImageButton((30,20),(64,64),pg.image.load('IMG/back-arrow.png'))
+		back_button.draw(screen)
+		for event in pg.event.get():
+			if event.type == pg.QUIT:
+				raise SystemExit()
+			elif event.type == pg.MOUSEBUTTONDOWN:
+				if event.button == 1:
+					if pg.Rect(back_button.coordinate,back_button.size).collidepoint(mouse_pos):
+						pg.mixer.Sound('SOU/select.wav').play()
+						return
+		
+		pg.display.update()
 
 def playingScreen():
 	'''Hiển thị màn hình chơi game'''
-	running_vehicles = [] # tạo list chứa các xe trên đường
 
-	mixer.music.load('SOU/tokyo-drift.mp3') # nhạc nền
-	mixer.music.play(-1) # lặp nhạc nền
+	pg.mixer.music.load('SOU/tokyo-drift.mp3') # nhạc nền
+	pg.mixer.music.play(-1) # lặp nhạc nền
 
 	pause = False # biến pause kiểm tra có pause game không
 	start = False # biến start để xe chạy đoạn đầu game
-	time, tic = 0, 0 # 2 biến để đếm thời gian chơi
+	time = 0 # 2 biến để đếm thời gian chơi
 	speed, level = 4, 1 # speed để điều chỉnh tốc độ của xe, level để điều chỉnh độ khó
 	background_scroll_x = 0 # để tạo hiệu ứng xe đang chạy
 
 	mycar = SpecialVehicle(-150,random.choice([75,225,375]),orangecar) # tạo đối tượng SpecialVehicle (là cái xe người chơi điều khiển)
-	# đoạn này vẽ tạo các đối tượng Vehicle (các xe đi trên đường) và đưa chúng vào list, vị trí các xe cách nhau 420px
+	
+	running_vehicles = [] # tạo list chứa các xe trên đường
+	'''vòng lặp tạo các đối tượng Vehicle (các xe đi trên đường)
+		và đưa chúng vào list, vị trí các xe cách nhau 420px'''
 	for i in range(3):
-		temp = Vehicle(1000+i*420,random.choice([75,225,375]),random.choice(vehicle_type))
+		temp = Vehicle(1000+i*420,random.choice([75,225,375]),
+				random.choice(vehicle_type))
 		running_vehicles.append(temp)
 
 	# Game tips để hiện thị khi dừng game
@@ -71,8 +136,8 @@ def playingScreen():
 
 	# vòng lặp game
 	while True:
+		tic = clock.tick(60)/1000 # đổi về đơn vị giây (fps = 60)
 		if not pause:
-			tic = clock.tick(60)/1000 # đổi về đơn vị giây (fps = 60)
 
 			# hiển thị màn hình chơi (background, thanh thời gian, lời nhắn, xe)
 			time_bar = small_font.render('Time: '+'{:.2f}'.format(time)+'s',True, white)
@@ -116,7 +181,7 @@ def playingScreen():
 					if mycar.getPos()[1] == vehicle.getPos()[1]:
 						if mycar.getPos()[0]>=vehicle.getPos()[0]-vehicle.getSize()[0] and mycar.getPos()[0]<=vehicle.getPos()[0]+vehicle.getSize()[0]:
 							brake.stop()
-							mixer.music.stop()
+							pg.mixer.music.stop()
 							crash.play()
 							return background_scroll_x, mycar.getPos(), time, running_vehicles
 
@@ -146,8 +211,9 @@ def playingScreen():
 							horn.play()
 						elif event.key == pg.K_RETURN:
 							tip = random.choice(game_tips) # chọn 1 tip để hiển thị
-							mixer.music.pause()
+							pg.mixer.music.pause()
 							pause = True
+							mycar.isSlowDown = False
 					elif event.type == pg.KEYUP:
 						if event.key == pg.K_a:
 							mycar.isSlowDown = False
@@ -178,15 +244,17 @@ def playingScreen():
 						raise SystemExit()
 					elif event.type == pg.KEYDOWN:
 						if event.key == pg.K_RETURN:
-							mixer.music.unpause()
+							pg.mixer.music.unpause()
 							pause = False
 					elif event.type == pg.MOUSEBUTTONDOWN:
 						if event.button == 1:
 							if pg.Rect(yes_button.coordinate,yes_button.size).collidepoint(mouse_pos):
-								mixer.music.unpause()
+								pg.mixer.Sound('SOU/select.wav').play()
+								pg.mixer.music.unpause()
 								pause = False
 							elif pg.Rect(no_button.coordinate,no_button.size).collidepoint(mouse_pos):
-								raise SystemExit()
+								pg.mixer.Sound('SOU/select.wav').play()
+								return 0
 					
 		pg.display.update()
 
@@ -211,10 +279,10 @@ def gameOverScreen(accident):
 		screen.blit(small_message,(120, 250))
 
 		# tạo 2 nút là replay và back
-		replay_button = TextButton((120,y),(120,70),'REPLAY',pg.font.SysFont('ocrastdopentype',18),white,white,trendy_green,arabian_green,0,10)
-		replay_button.draw(screen,mouse_pos)
-		back_button = TextButton((420,y),(120,70),'BACK',pg.font.SysFont('ocrastdopentype',18),white,white,valentine_red,abarian_red,0,10)
-		back_button.draw(screen,mouse_pos)
+		replay_button = ImageButton((150,y),(64,64),pg.image.load('IMG/replay.png'))
+		replay_button.draw(screen)
+		back_button = ImageButton((400,y),(64,64),pg.image.load('IMG/quit.png'))
+		back_button.draw(screen)
 		
 		# tạo hiệu ứng cho ảnh rip và 2 nút
 		if x>700:
@@ -229,19 +297,40 @@ def gameOverScreen(accident):
 			elif event.type == pg.MOUSEBUTTONDOWN:
 				if event.button == 1:
 					if pg.Rect(back_button.coordinate,back_button.size).collidepoint(mouse_pos):
-						mixer.Sound('SOU/select.wav').play()
+						pg.mixer.Sound('SOU/select.wav').play()
 						return 0
 					elif pg.Rect(replay_button.coordinate,replay_button.size).collidepoint(mouse_pos):
-						mixer.Sound('SOU/select.wav').play()
-						return 1
+						pg.mixer.Sound('SOU/select.wav').play()
+						return
 
 		pg.display.update()
 
 def main():
 	while True:
-		accident = playingScreen()
-		after_accident = gameOverScreen(accident)
-		if after_accident == 0:
-			break
+		option = menuScreen()
+		while option == 1:
+			accident = playingScreen()
+			if accident==0:
+				break
+			game_over_option = gameOverScreen(accident)
+			if game_over_option == 0:
+				break
+		if option == 2:
+			guideScreen()		
 
 main()
+
+'''
+def name(args):
+	# Khai báo các biến/mở nhạc...
+	while True:
+		# Hiển thị ảnh/chữ lên màn hình
+
+		for event in pg.event.get():
+			if event.type == pg.QUIT:
+				raise SystemExit()
+
+			# Xử lý thêm các sự kiện khác
+
+		pg.display.update() # Cập nhật thay đổi trên màn hình
+'''

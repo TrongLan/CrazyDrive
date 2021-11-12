@@ -1,7 +1,6 @@
 import pygame
 
 class RectangleButton():
-    '''Lớp các nút bấm với tọa độ và phạm vi cho trước'''
     def __init__(self,coordinate,size):
         self.coordinate = coordinate
         self.size = size
@@ -15,9 +14,12 @@ class ImageButton(RectangleButton):
     def draw(self, screen):
         screen.blit(self.image,self.coordinate)
 
+
 class TextButton(RectangleButton):
     '''Định nghĩa lớp nút bấm hiện thị dạng chữ'''
-    def __init__(self, coordinate, size, text, font, text_color, text_hover_color ,button_color, button_hover_color, border_size, border_radius):
+    def __init__(self, coordinate, size, text, font, text_color,
+                text_hover_color ,button_color, button_hover_color, 
+                border_size, border_radius):
         super().__init__(coordinate,size)
         self.text = text
         self.font = font
@@ -32,18 +34,24 @@ class TextButton(RectangleButton):
         button_area = pygame.Rect(self.coordinate,self.size)
         text = self.font.render(self.text,True,self.text_color)
         text_size = text.get_size()
+
         # Công thức tính tọa độ của chữ trên nút bấm sao cho chữ được căn giữa nút
-        text_coordinate = [self.coordinate[0] + self.size[0]/2 - text_size[0]/2, self.coordinate[1] + self.size[1]/2 - text_size[1]/2]
-        pygame.draw.rect(screen,self.button_color,button_area,self.border_size,self.border_radius)
+        text_coordinate = [self.coordinate[0] + self.size[0]/2 - text_size[0]/2,
+                            self.coordinate[1] + self.size[1]/2 - text_size[1]/2]
+        pygame.draw.rect(screen,self.button_color,button_area,
+                                self.border_size,
+                                self.border_radius)
         
+        # Kiểm tra con trỏ chuột có nằm trong phạm vi nút bấm
         if button_area.collidepoint(mouse_point):
-            pygame.draw.rect(screen,self.button_hover_color,button_area,self.border_size,self.border_radius)
+            pygame.draw.rect(screen,self.button_hover_color,
+                            button_area,self.border_size,
+                            self.border_radius)
             text = self.font.render(self.text,True,self.text_hover_color)
 
         screen.blit(text,text_coordinate)
 
 class Vehicle():
-    '''định nghĩa phương tiện giao thông trong game gồm vị trí, thể loại (ảnh)'''
     def __init__(self, x, y, kind):
         self.x = x
         self.y = y
@@ -58,7 +66,6 @@ class Vehicle():
         return self.kind.get_size()
 
 class SpecialVehicle(Vehicle):
-    '''định nghĩa phương tiện giao thông người chơi có thể điều khiển (kế thừa lớp Vehicle)'''
     def __init__(self, x, y, kind):
         super().__init__(x,y,kind)
         self.isSlowDown = False
@@ -73,7 +80,9 @@ class SpecialVehicle(Vehicle):
     def checkSpeed(self):
         return self.isSlowDown
     def drawUpArrow(self,screen,color):
-        pygame.draw.polygon(screen,color,[(self.x+60, self.y+30), (self.x+90, self.y+30), (self.x+75, self.y+10)])
+        pygame.draw.polygon(screen,color,[(self.x+60, self.y+30),
+                (self.x+90, self.y+30), (self.x+75, self.y+10)])
     def drawDownArrow(self,screen,color):
-        pygame.draw.polygon(screen,color,[(self.x+60, self.y+120), (self.x+90, self.y+120), (self.x+75, self.y+140)])
+        pygame.draw.polygon(screen,color,[(self.x+60, self.y+120),
+                (self.x+90, self.y+120), (self.x+75, self.y+140)])
         
