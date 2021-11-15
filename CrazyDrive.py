@@ -179,7 +179,7 @@ def playingScreen():
 
 					# kiểm tra nếu có va chạm,  trả về thông tin vụ tai nạn (một danh sách gồm vị trí các xe, thời gian chạy)
 					if mycar.getPos()[1] == vehicle.getPos()[1]:
-						if mycar.getPos()[0]>=vehicle.getPos()[0]-vehicle.getSize()[0] and mycar.getPos()[0]<=vehicle.getPos()[0]+vehicle.getSize()[0]:
+						if (mycar.getPos()[0]>=vehicle.getPos()[0] and mycar.getPos()[0]<=vehicle.getPos()[0]+vehicle.getSize()[0]) or (mycar.getPos()[0]+mycar.getSize()[0]>=vehicle.getPos()[0] and mycar.getPos()[0]+mycar.getSize()[0]<=vehicle.getPos()[0]+vehicle.getSize()[0]):
 							brake.stop()
 							pg.mixer.music.stop()
 							crash.play()
